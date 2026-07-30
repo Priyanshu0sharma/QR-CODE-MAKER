@@ -81,7 +81,7 @@ export const TypeSelector: React.FC<TypeSelectorProps> = ({ options, setOptions 
             type="text"
             value={options.value}
             onChange={(e) => setOptions((prev) => ({ ...prev, value: e.target.value }))}
-            placeholder={activeTypeConfig.placeholder}
+            placeholder="Enter destination URL or payload data here..."
             className="w-full px-4 py-3 text-xs rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 focus:ring-2 focus:ring-teal-500 focus:outline-none"
           />
         )}
