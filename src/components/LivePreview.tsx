@@ -25,7 +25,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({ options }) => {
         width: 280,
         height: 280,
         type: 'canvas',
-        data: options.value || 'https://rootofweb.com',
+        data: options.value || 'https://rootofweb.in',
         image: options.enableLogo ? options.logoUrl : undefined,
         dotsOptions: {
           color: options.fgColor,
@@ -58,7 +58,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({ options }) => {
       }
     } else {
       qrCodeInstance.current.update({
-        data: options.value || 'https://rootofweb.com',
+        data: options.value || 'https://rootofweb.in',
         image: options.enableLogo ? options.logoUrl : undefined,
         dotsOptions: {
           color: options.fgColor,

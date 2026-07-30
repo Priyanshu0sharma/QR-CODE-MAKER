@@ -14,7 +14,7 @@ export default function Home() {
 
   const [options, setOptions] = useState<QROptions>({
     type: 'url',
-    value: 'https://rootofweb.com',
+    value: 'https://rootofweb.in',
     artMode: 'sticker_peel',
     shapeMask: 'sticker_peel',
     patternStyle: 'rounded',

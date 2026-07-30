@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
               Building next-generation digital products, SaaS applications & web experiences.
             </p>
             <a
-              href="https://rootofweb.com"
+              href="https://rootofweb.in"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-1 text-xs font-bold text-teal-600 dark:text-teal-400 hover:underline pt-1"
