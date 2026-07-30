@@ -19,12 +19,11 @@ export const LivePreview: React.FC<LivePreviewProps> = ({ options }) => {
   const [copied, setCopied] = React.useState(false);
   const [downloadFormat, setDownloadFormat] = React.useState<'png' | 'jpeg' | 'svg' | 'pdf'>('png');
 
-  // Real-time canvas render with zero server delay
   useEffect(() => {
     if (!qrCodeInstance.current) {
       qrCodeInstance.current = new QRCodeStyling({
-        width: 300,
-        height: 300,
+        width: 280,
+        height: 280,
         type: 'canvas',
         data: options.value || 'https://rootofweb.com',
         image: options.enableLogo ? options.logoUrl : undefined,
@@ -33,7 +32,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({ options }) => {
           type: options.patternStyle as any,
         },
         backgroundOptions: {
-          color: options.bgType === 'none' ? options.bgColor : 'transparent',
+          color: options.bgPresetUrl ? 'transparent' : options.bgColor,
         },
         imageOptions: {
           crossOrigin: 'anonymous',
@@ -45,7 +44,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({ options }) => {
           color: options.fgColor,
         },
         cornersDotOptions: {
-          type: options.cornerDotStyle as any,
+          type: 'dot',
           color: options.fgColor,
         },
         qrOptions: {
@@ -66,14 +65,10 @@ export const LivePreview: React.FC<LivePreviewProps> = ({ options }) => {
           type: options.patternStyle as any,
         },
         backgroundOptions: {
-          color: options.bgType === 'none' ? options.bgColor : 'transparent',
+          color: options.bgPresetUrl ? 'transparent' : options.bgColor,
         },
         cornersSquareOptions: {
           type: options.cornerSquareStyle as any,
-          color: options.fgColor,
-        },
-        cornersDotOptions: {
-          type: options.cornerDotStyle as any,
           color: options.fgColor,
         },
         imageOptions: {
@@ -130,67 +125,58 @@ export const LivePreview: React.FC<LivePreviewProps> = ({ options }) => {
   return (
     <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-gray-200/80 dark:border-gray-800/80 rounded-3xl p-6 shadow-2xl space-y-6 flex flex-col items-center">
       
-      {/* Canvas Top Bar */}
+      {/* Top Header */}
       <div className="w-full flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-800">
         <div>
           <h3 className="font-black text-xs uppercase tracking-wider text-teal-600 dark:text-teal-400">
-            Live Preview Studio
+            Aesthetic QR Render
           </h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Vector Render Engine</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">Vector HD Canvas Engine</p>
         </div>
-        <div className="flex items-center space-x-1.5 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 font-extrabold">
+        <div className="flex items-center space-x-1 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 font-bold">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Real-time</span>
+          <span>Live Render</span>
         </div>
       </div>
 
-      {/* Main Mockup Stand & Art Frame Container */}
+      {/* Main Art Container */}
       <div className="relative w-full max-w-sm flex items-center justify-center p-2">
         
-        {/* Mockup Stand Background Frame */}
         <div
           ref={containerRef}
-          className={`w-full p-6 rounded-[32px] flex flex-col items-center justify-center relative shadow-2xl transition-all duration-300 overflow-hidden ${
-            options.frameStyle === 'card_stand'
-              ? 'bg-gradient-to-b from-white/90 via-slate-100/90 to-gray-200/90 dark:from-gray-800/90 dark:via-gray-900/90 dark:to-slate-950/90 border-4 border-white/50 dark:border-gray-700/50 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)]'
-              : options.frameStyle === 'sticker_peel'
-              ? 'bg-white text-gray-900 rounded-b-[40px] shadow-2xl border-4 border-amber-300'
-              : 'bg-white dark:bg-gray-900 border-4 border-teal-500'
+          className={`w-full p-8 flex flex-col items-center justify-center relative shadow-2xl transition-all duration-300 ${
+            options.frameStyle === 'sticker_peel'
+              ? 'rounded-[48px] bg-white text-gray-900 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.2)] border-8 border-gray-100 relative'
+              : 'rounded-[32px] bg-white dark:bg-gray-900 border-4 border-teal-500'
           }`}
           style={{
-            backgroundImage: options.bgImageUrl ? `url(${options.bgImageUrl})` : undefined,
+            backgroundImage: options.bgPresetUrl ? `url(${options.bgPresetUrl})` : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         >
-          {/* Background Overlay */}
-          {options.bgImageUrl && (
-            <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
+          {/* Sticker Peel Effect Overlay */}
+          {options.frameStyle === 'sticker_peel' && (
+            <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-gray-200 to-white shadow-md rounded-bl-3xl border-l border-b border-gray-300" />
           )}
 
-          {/* Top CTA Header */}
-          {options.enableFrame && options.frameText && (
-            <div className="relative z-10 mb-4 px-6 py-2 rounded-full font-black text-xs uppercase tracking-wider bg-teal-600 text-white shadow-lg border border-white/20">
-              {options.frameText}
-            </div>
-          )}
-
-          {/* QR Canvas Render Wrapper */}
-          <div className="relative z-10 p-3 rounded-2xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-md shadow-xl border border-white/40">
+          {/* QR Inner Card */}
+          <div className="p-3 rounded-2xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-md shadow-xl border border-white/50">
             <div ref={qrRef} className="rounded-xl overflow-hidden flex items-center justify-center" />
           </div>
 
-          {/* Bottom Medallion Label */}
-          <div className="relative z-10 mt-4 flex items-center space-x-2 bg-gray-900/80 text-teal-300 px-4 py-1.5 rounded-full text-[11px] font-bold border border-teal-500/30">
-            <Sparkles className="w-3.5 h-3.5 text-teal-400" />
-            <span>Root Of Web Verified QR</span>
-          </div>
+          {/* Sticker Bottom CTA Label */}
+          {options.frameText && (
+            <div className="mt-5 px-6 py-2 rounded-full font-black text-xs uppercase tracking-wider bg-teal-600 text-white shadow-lg border border-white/20">
+              {options.frameText}
+            </div>
+          )}
 
         </div>
 
       </div>
 
-      {/* Format Selector */}
+      {/* Export Format Selector */}
       <div className="w-full pt-1">
         <label className="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-2 text-center">
           Export Format ({options.dpiQuality} DPI Print Quality)
@@ -212,7 +198,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({ options }) => {
         </div>
       </div>
 
-      {/* Download Action Buttons */}
+      {/* Action Download Buttons */}
       <div className="w-full grid grid-cols-2 gap-3">
         <button
           onClick={handleCopy}
@@ -230,10 +216,6 @@ export const LivePreview: React.FC<LivePreviewProps> = ({ options }) => {
           <span>Download High-Res</span>
         </button>
       </div>
-
-      <p className="text-[11px] text-gray-400 text-center">
-        ★ 100% Free Client-Side Export • No Server Processing • Unlimited Usage
-      </p>
 
     </div>
   );

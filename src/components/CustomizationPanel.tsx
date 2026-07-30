@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { 
-  Sparkles, Sliders, Image as ImageIcon, Palette, Layers, Wand2, Upload, RotateCw, ShieldCheck, Sun, Moon
+  Sparkles, Wand2, Upload, RotateCw, Image as ImageIcon, Heart, Palette, Layers
 } from 'lucide-react';
-import { QROptions, AI_THEMES, BACKGROUND_COLLECTION } from '@/types/qr';
+import { QROptions, ART_PRESETS } from '@/types/qr';
 
 interface CustomizationProps {
   options: QROptions;
@@ -12,7 +12,7 @@ interface CustomizationProps {
 }
 
 export const CustomizationPanel: React.FC<CustomizationProps> = ({ options, setOptions }) => {
-  const [activeTab, setActiveTab] = React.useState<'ai' | 'bg' | 'logo' | 'style' | 'frame'>('ai');
+  const [activeTab, setActiveTab] = React.useState<'presets' | 'shapes' | 'colors' | 'logo'>('presets');
 
   return (
     <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-gray-200/80 dark:border-gray-800/80 rounded-3xl p-6 shadow-2xl space-y-6">
@@ -21,26 +21,23 @@ export const CustomizationPanel: React.FC<CustomizationProps> = ({ options, setO
       <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-800">
         <div>
           <h3 className="font-black text-xs uppercase tracking-wider text-teal-600 dark:text-teal-400 flex items-center space-x-1.5">
-            <Wand2 className="w-4 h-4 text-teal-500" />
-            <span>AI Design & Art Studio</span>
+            <Sparkles className="w-4 h-4 text-teal-500 fill-teal-500" />
+            <span>Next-Gen QR Art Generator</span>
           </h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400">1-Click Themes, Medallion Logos & Mockup Stand Frames</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">Sticker Peels, AI Art Embeds & Animal Silhouette Shapes</p>
         </div>
         <button
           onClick={() => {
             setOptions((prev) => ({
               ...prev,
-              activeTheme: 'custom',
+              artMode: 'sticker_peel',
               fgColor: '#0D9488',
               bgColor: '#FFFFFF',
-              bgType: 'none',
-              bgImageUrl: null,
-              logoStyle: 'glass_circle',
               enableLogo: true,
               logoUrl: '/logo.jpeg',
               enableFrame: true,
-              frameStyle: 'card_stand',
-              frameText: 'SCAN & PAY NOW',
+              frameText: 'SCAN HERE',
+              frameStyle: 'sticker_peel',
             }));
           }}
           className="flex items-center space-x-1 text-xs text-teal-600 dark:text-teal-400 font-extrabold hover:underline"
@@ -50,237 +47,106 @@ export const CustomizationPanel: React.FC<CustomizationProps> = ({ options, setO
         </button>
       </div>
 
-      {/* Main Tabs */}
-      <div className="grid grid-cols-5 gap-1.5 bg-gray-100 dark:bg-gray-800/70 p-1.5 rounded-2xl text-xs font-black">
+      {/* Tabs */}
+      <div className="grid grid-cols-4 gap-1.5 bg-gray-100 dark:bg-gray-800/70 p-1.5 rounded-2xl text-xs font-black">
         <button
-          onClick={() => setActiveTab('ai')}
-          className={`py-2 rounded-xl transition-all ${activeTab === 'ai' ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}`}
+          onClick={() => setActiveTab('presets')}
+          className={`py-2 rounded-xl transition-all ${activeTab === 'presets' ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}`}
         >
-          AI Themes
+          Art Presets
         </button>
         <button
-          onClick={() => setActiveTab('bg')}
-          className={`py-2 rounded-xl transition-all ${activeTab === 'bg' ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}`}
+          onClick={() => setActiveTab('shapes')}
+          className={`py-2 rounded-xl transition-all ${activeTab === 'shapes' ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}`}
         >
-          Background
+          Shape Silhouette
+        </button>
+        <button
+          onClick={() => setActiveTab('colors')}
+          className={`py-2 rounded-xl transition-all ${activeTab === 'colors' ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}`}
+        >
+          Colors
         </button>
         <button
           onClick={() => setActiveTab('logo')}
           className={`py-2 rounded-xl transition-all ${activeTab === 'logo' ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}`}
         >
-          Logo Medallion
-        </button>
-        <button
-          onClick={() => setActiveTab('style')}
-          className={`py-2 rounded-xl transition-all ${activeTab === 'style' ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}`}
-        >
-          Matrix Colors
-        </button>
-        <button
-          onClick={() => setActiveTab('frame')}
-          className={`py-2 rounded-xl transition-all ${activeTab === 'frame' ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}`}
-        >
-          Mockup Frame
+          Brand Logo
         </button>
       </div>
 
-      {/* TAB 1: AI THEMES */}
-      {activeTab === 'ai' && (
+      {/* TAB 1: ART PRESETS */}
+      {activeTab === 'presets' && (
         <div className="space-y-4">
           <label className="block text-xs font-black text-gray-700 dark:text-gray-300">
-            Select 1-Click Aesthetic AI Theme Preset
+            Select 1-Click Aesthetic Art Preset
           </label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {AI_THEMES.map((theme) => (
+          <div className="grid grid-cols-2 gap-3">
+            {ART_PRESETS.map((preset) => (
               <button
-                key={theme.id}
+                key={preset.id}
                 onClick={() => {
                   setOptions((prev) => ({
                     ...prev,
-                    activeTheme: theme.id as any,
-                    fgColor: theme.fg,
-                    bgColor: theme.bg,
-                    frameColor: theme.frame,
-                    patternStyle: theme.pattern as any,
+                    artMode: 'full_art',
+                    bgPresetUrl: preset.maskUrl,
+                    fgColor: preset.fg,
+                    bgColor: preset.bg,
+                    frameText: preset.frameText,
+                    frameStyle: preset.style as any,
                   }));
                 }}
-                className={`p-3 rounded-2xl border text-left flex flex-col justify-between transition-all duration-200 ${
-                  options.activeTheme === theme.id
-                    ? 'border-teal-500 bg-teal-500/10 ring-2 ring-teal-500/20 scale-[1.02]'
-                    : 'border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50'
-                }`}
-              >
-                <span className="text-xs font-extrabold text-gray-900 dark:text-white mb-2">{theme.name}</span>
-                <div className="flex items-center space-x-1.5">
-                  <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: theme.fg }} />
-                  <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: theme.bg }} />
-                  <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: theme.frame }} />
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* TAB 2: BACKGROUND STUDIO */}
-      {activeTab === 'bg' && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-gray-700 dark:text-gray-300">
-              Curated Background Image Collections
-            </span>
-            <button
-              onClick={() => setOptions((prev) => ({ ...prev, bgType: 'none', bgImageUrl: null }))}
-              className="text-[11px] font-bold text-red-500 hover:underline"
-            >
-              Remove Background
-            </button>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
-            {BACKGROUND_COLLECTION.map((bg) => (
-              <button
-                key={bg.id}
-                onClick={() => {
-                  setOptions((prev) => ({
-                    ...prev,
-                    bgType: 'preset',
-                    bgImageUrl: bg.url,
-                  }));
-                }}
-                className="group relative h-20 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-md transition-all hover:scale-[1.03]"
+                className="group relative h-28 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-lg transition-all hover:scale-[1.02]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={bg.url} alt={bg.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 flex items-end p-2 transition-all">
-                  <span className="text-[10px] font-extrabold text-white truncate">{bg.name}</span>
+                <img src={preset.maskUrl} alt={preset.name} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-3 flex flex-col justify-end">
+                  <span className="text-xs font-black text-white">{preset.name}</span>
+                  <span className="text-[10px] text-teal-300 font-bold">{preset.frameText}</span>
                 </div>
               </button>
             ))}
           </div>
-
-          {/* Upload Custom BG */}
-          <div className="pt-2">
-            <label className="cursor-pointer w-full py-3 px-4 rounded-2xl border border-dashed border-teal-500/40 hover:bg-teal-500/10 text-teal-600 dark:text-teal-400 font-bold text-xs flex items-center justify-center space-x-2 transition-all">
-              <Upload className="w-4 h-4" />
-              <span>Upload Custom Background Image / Art</span>
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (evt) => {
-                      if (evt.target?.result) {
-                        setOptions((prev) => ({
-                          ...prev,
-                          bgType: 'custom_image',
-                          bgImageUrl: evt.target!.result as string,
-                        }));
-                      }
-                    };
-                    reader.readAsDataURL(file);
-                  }
-                }}
-              />
-            </label>
-          </div>
         </div>
       )}
 
-      {/* TAB 3: LOGO MEDALLION STUDIO */}
-      {activeTab === 'logo' && (
+      {/* TAB 2: SILHOUETTE SHAPES */}
+      {activeTab === 'shapes' && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-gray-700 dark:text-gray-300">
-              Center Logo Medallion Styling
-            </span>
-            <input
-              type="checkbox"
-              checked={options.enableLogo}
-              onChange={(e) => setOptions((prev) => ({ ...prev, enableLogo: e.target.checked }))}
-              className="w-4 h-4 text-teal-600 rounded focus:ring-teal-500"
-            />
+          <label className="block text-xs font-black text-gray-700 dark:text-gray-300">
+            Artistic Shape Mask Container
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { id: 'sticker_peel', label: 'Curled Sticker Peel' },
+              { id: 'rabbit', label: 'Rabbit Silhouette' },
+              { id: 'butterfly', label: 'Floral Butterfly' },
+              { id: 'brand_badge', label: 'Brand Medallion' },
+              { id: 'card_stand', label: 'Acrylic Stand' },
+            ].map((shape) => (
+              <button
+                key={shape.id}
+                onClick={() => setOptions((prev) => ({ ...prev, shapeMask: shape.id as any, artMode: 'shape_mask' }))}
+                className={`py-3 px-2 rounded-2xl border text-xs font-black text-center transition-all ${
+                  options.shapeMask === shape.id
+                    ? 'border-teal-500 bg-teal-500/10 text-teal-600 dark:text-teal-400 ring-2 ring-teal-500/20'
+                    : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400'
+                }`}
+              >
+                {shape.label}
+              </button>
+            ))}
           </div>
-
-          {options.enableLogo && (
-            <div className="space-y-4 pt-1">
-              <div className="flex items-center space-x-3">
-                <div className="w-14 h-14 rounded-2xl border border-gray-200 dark:border-gray-700 p-1.5 bg-white flex items-center justify-center shadow-lg">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={options.logoUrl} alt="Logo" className="w-full h-full object-contain rounded-xl" />
-                </div>
-                <div className="space-y-1">
-                  <button
-                    onClick={() => setOptions((prev) => ({ ...prev, logoUrl: '/logo.jpeg' }))}
-                    className="text-xs text-teal-600 dark:text-teal-400 font-extrabold hover:underline block"
-                  >
-                    Use Root Of Web Logo
-                  </button>
-                  <label className="cursor-pointer text-xs text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 flex items-center space-x-1 font-semibold">
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>Upload Brand Logo Image</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onload = (evt) => {
-                            if (evt.target?.result) {
-                              setOptions((prev) => ({ ...prev, logoUrl: evt.target!.result as string }));
-                            }
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                    />
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">
-                  Medallion Safe Zone Surround Style
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { id: 'glass_circle', label: 'Glass Ring' },
-                    { id: 'white_circle', label: 'Solid White' },
-                    { id: 'gold_ring', label: 'Gold Ring' },
-                    { id: 'silver_ring', label: 'Silver Ring' },
-                    { id: 'neon_glow', label: 'Neon Glow' },
-                  ].map((style) => (
-                    <button
-                      key={style.id}
-                      onClick={() => setOptions((prev) => ({ ...prev, logoStyle: style.id as any }))}
-                      className={`py-2 px-2 rounded-xl border text-xs font-extrabold ${
-                        options.logoStyle === style.id
-                          ? 'border-teal-500 bg-teal-500/10 text-teal-600 dark:text-teal-400'
-                          : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400'
-                      }`}
-                    >
-                      {style.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
-      {/* TAB 4: MATRIX COLORS */}
-      {activeTab === 'style' && (
+      {/* TAB 3: COLORS */}
+      {activeTab === 'colors' && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
-                Matrix Code Color
+                Data Dots Color
               </label>
               <div className="flex items-center space-x-2">
                 <input
@@ -300,7 +166,7 @@ export const CustomizationPanel: React.FC<CustomizationProps> = ({ options, setO
 
             <div>
               <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
-                Background Canvas Color
+                Background Card Color
               </label>
               <div className="flex items-center space-x-2">
                 <input
@@ -321,45 +187,43 @@ export const CustomizationPanel: React.FC<CustomizationProps> = ({ options, setO
         </div>
       )}
 
-      {/* TAB 5: MOCKUP FRAME */}
-      {activeTab === 'frame' && (
+      {/* TAB 4: LOGO */}
+      {activeTab === 'logo' && (
         <div className="space-y-4">
-          <div>
-            <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">
-              Mockup Display Stand Frame Style
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { id: 'card_stand', label: 'Acrylic Desk Stand' },
-                { id: 'modern_badge', label: 'Modern Badge Frame' },
-                { id: 'sticker_peel', label: 'Sticker Peel Frame' },
-                { id: 'minimal_border', label: 'Minimalist Border' },
-              ].map((frame) => (
-                <button
-                  key={frame.id}
-                  onClick={() => setOptions((prev) => ({ ...prev, frameStyle: frame.id as any }))}
-                  className={`py-2.5 px-3 rounded-2xl border text-xs font-extrabold ${
-                    options.frameStyle === frame.id
-                      ? 'border-teal-500 bg-teal-500/10 text-teal-600 dark:text-teal-400'
-                      : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400'
-                  }`}
-                >
-                  {frame.label}
-                </button>
-              ))}
+          <div className="flex items-center space-x-3">
+            <div className="w-14 h-14 rounded-2xl border border-gray-200 dark:border-gray-700 p-1.5 bg-white flex items-center justify-center shadow-lg">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={options.logoUrl} alt="Logo" className="w-full h-full object-contain rounded-xl" />
             </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">
-              Custom CTA Header Text
-            </label>
-            <input
-              type="text"
-              value={options.frameText}
-              onChange={(e) => setOptions((prev) => ({ ...prev, frameText: e.target.value }))}
-              className="w-full px-4 py-2.5 text-xs rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 font-bold"
-            />
+            <div className="space-y-1">
+              <button
+                onClick={() => setOptions((prev) => ({ ...prev, logoUrl: '/logo.jpeg' }))}
+                className="text-xs text-teal-600 dark:text-teal-400 font-extrabold hover:underline block"
+              >
+                Use Root Of Web Logo
+              </button>
+              <label className="cursor-pointer text-xs text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 flex items-center space-x-1 font-semibold">
+                <Upload className="w-3.5 h-3.5" />
+                <span>Upload Custom Logo</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (evt) => {
+                        if (evt.target?.result) {
+                          setOptions((prev) => ({ ...prev, logoUrl: evt.target!.result as string }));
+                        }
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </label>
+            </div>
           </div>
         </div>
       )}
